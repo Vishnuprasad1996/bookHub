@@ -43,7 +43,6 @@ const apiStatusConstants = {
 class Bookshelves extends Component {
   state = {
     booksDetails: [],
-    bookshelfName: '',
     searchText: '',
     apiStatus: apiStatusConstants.initial,
     activeTabValue: bookshelvesList[0].value,
@@ -56,8 +55,8 @@ class Bookshelves extends Component {
 
   getBooksDetails = async () => {
     this.setState({apiStatus: apiStatusConstants.inProgress})
-    const {bookshelfName, searchText} = this.state
-    const apiUrl = `https://apis.ccbp.in/book-hub/books?shelf=${bookshelfName}&search=${searchText}`
+    const {activeTabValue, searchText} = this.state
+    const apiUrl = `https://apis.ccbp.in/book-hub/books?shelf=${activeTabValue}&search=${searchText}`
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       method: 'GET',
@@ -87,7 +86,7 @@ class Bookshelves extends Component {
 
   onChangeTab = (value, label) => {
     this.setState(
-      {bookshelfName: value, activeTabValue: value, activeBookLabel: label},
+      {activeTabValue: value, activeBookLabel: label},
       this.getBooksDetails,
     )
   }
@@ -110,7 +109,7 @@ class Bookshelves extends Component {
           alt="no books"
         />
         <p className="no-prod-desc">
-          Your search for <span>{searchText}</span> did not find any matches.
+          Your search for {`${searchText}`} did not find any matches.
         </p>
       </div>
     )
